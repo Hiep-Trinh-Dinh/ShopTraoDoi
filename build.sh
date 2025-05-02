@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Cài đặt dependencies cho server
+# Cài đặt dependencies cho server và đảm bảo socket.io được cài đặt
 cd server
 npm install --legacy-peer-deps
+npm install socket.io --save
 
 # Build client
 cd ../client
