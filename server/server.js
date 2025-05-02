@@ -67,7 +67,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Routes API PHẢI ở sau static file serving và trước catch-all route
-app.use('/api', apiRoutes);
+// app.use('/api', apiRoutes);
 
 // Connect to MongoDB and start server
 const initializeServer = async () => {
