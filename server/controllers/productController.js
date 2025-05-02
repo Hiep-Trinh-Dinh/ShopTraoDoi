@@ -23,14 +23,14 @@ exports.getProducts = async (req, res) => {
 // Create new product
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, price, category, image } = req.body;
+        const { name, description, price, category } = req.body;
         
         const product = await Product.create({
             name,
             description,
             price,
             category,
-            image: image || "/placeholder.svg",
+            image: req.file ? req.file.path : 'https://res.cloudinary.com/your-cloud-name/image/upload/shoptraodoi/default-product.jpg',
             seller: req.user._id
         });
 
@@ -76,11 +76,7 @@ exports.getProductById = async (req, res) => {
 // Update product
 exports.updateProduct = async (req, res) => {
     try {
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true }
-        );
+        const product = await Product.findById(req.params.id);
 
         if (!product) {
             return res.status(404).json({
@@ -89,9 +85,21 @@ exports.updateProduct = async (req, res) => {
             });
         }
 
+        const productFields = req.body;
+
+        if (req.file) {
+            productFields.image = req.file.path;
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            productFields,
+            { new: true, runValidators: true }
+        );
+
         res.json({
             success: true,
-            product
+            product: updatedProduct
         });
     } catch (error) {
         console.error('Error updating product:', error);

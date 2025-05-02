@@ -26,7 +26,9 @@ const server = http.createServer(app);
 
 // CORS configuration
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://shoptraodoi-client.onrender.com', 'https://shoptraodoi.onrender.com'] 
+        : ['http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

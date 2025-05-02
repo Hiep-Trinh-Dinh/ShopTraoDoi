@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: shoptraodoi-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        value: mongodb+srv://nguyenminhthai655:R6QD73YytlO46mfM@cluster0.ou8y0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: mysecretkey123
+      - key: EMAIL_USER
+        value: dinhhieptdh22@gmail.com
+      - key: EMAIL_PASSWORD
+        value: qfjaofyabynstebp
+      - key: CLOUDINARY_CLOUD_NAME
+        value: digj9t8om
+      - key: CLOUDINARY_API_KEY
+        value: 852875261613694
+      - key: CLOUDINARY_API_SECRET
+        value: TaDwpWj1Mx-VXCGye9OqIql1IYA
+      - key: NODE_ENV
+        value: production

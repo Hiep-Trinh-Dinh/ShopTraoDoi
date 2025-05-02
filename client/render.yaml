@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: shoptraodoi-client
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://shoptraodoi-api.onrender.com
+      - key: VITE_GEMINI_API_KEY
+        value: AIzaSyC-hqlk1hXU6jh-m5J-PnxaPaCSMCb_5hE
+      - key: CLOUDINARY_CLOUD_NAME
+        value: digj9t8om
+      - key: CLOUDINARY_API_KEY
+        value: 852875261613694
+      - key: CLOUDINARY_API_SECRET
+        value: TaDwpWj1Mx-VXCGye9OqIql1IYA
