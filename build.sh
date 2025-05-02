@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Cài đặt dependencies cho server và đảm bảo socket.io được cài đặt
+# Cài đặt dependencies cho server
 cd server
 npm install --legacy-peer-deps
-npm install socket.io --save
+npm uninstall cloudinary
+npm install cloudinary@1.41.3 --save
 
 # Build client
 cd ../client
