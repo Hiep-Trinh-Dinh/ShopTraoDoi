@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const fs = require('fs');
 
 function setupStaticFileServing(app) {
   console.log('Setting up static file serving...');
@@ -8,8 +9,19 @@ function setupStaticFileServing(app) {
   const staticPath = path.join(__dirname, '../client/dist');
   console.log('Static path:', staticPath);
   
-  // Phục vụ các file trong thư mục assets với MIME type chính xác
-  app.use('/assets', express.static(path.join(staticPath, 'assets'), {
+  // Log danh sách file trong thư mục assets để debug
+  const assetsPath = path.join(staticPath, 'assets');
+  console.log('Assets directory contents:');
+  if (fs.existsSync(assetsPath)) {
+    fs.readdirSync(assetsPath).forEach(file => {
+      console.log(` - ${file}`);
+    });
+  } else {
+    console.log('Assets directory not found!');
+  }
+  
+  // Phục vụ tất cả các file static với MIME type đúng
+  app.use(express.static(staticPath, {
     setHeaders: (res, filePath) => {
       if (filePath.endsWith('.js')) {
         res.set('Content-Type', 'application/javascript');
@@ -18,14 +30,17 @@ function setupStaticFileServing(app) {
       }
     }
   }));
-  
-  // Phục vụ các file static khác
-  app.use(express.static(staticPath));
 
   // Route cho client-side routing (SPA)
   app.get('*', (req, res, next) => {
-    // Bỏ qua các request tới API
-    if (req.url.startsWith('/api') || req.url.startsWith('/assets')) {
+    // Bỏ qua requests tới API
+    if (req.url.startsWith('/api')) {
+      return next();
+    }
+    
+    // Bỏ qua requests tới assets
+    if (req.url.includes('/assets/')) {
+      console.log(`Asset request not found: ${req.url}`);
       return next();
     }
     
