@@ -5,6 +5,7 @@ import { useParams, Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { ShoppingCart, ArrowLeft } from "lucide-react"
 import { useAuth } from "../context/AuthContext"
+import API_BASE_URL from '../utils/apiConfig'
 
 const ProductDetail = () => {
     const { id } = useParams()
@@ -19,7 +20,7 @@ const ProductDetail = () => {
         const fetchProduct = async () => {
             try {
                 console.log("Fetching product with ID:", id); // Debug log
-                const response = await fetch(`http://localhost:5000/api/products/${id}`);
+                const response = await fetch(`${API_BASE_URL}/products/${id}`);
                 const data = await response.json();
                 console.log("Response data:", data); // Debug log
 

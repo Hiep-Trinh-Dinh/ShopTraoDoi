@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { useAuth } from "../context/AuthContext"
 import { CreditCard, MapPin, Phone, Mail } from "lucide-react"
+import API_BASE_URL from '../utils/apiConfig'
 
 const Checkout = () => {
     const { cart, getCartTotal } = useCart()
@@ -34,7 +35,7 @@ const Checkout = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            const response = await fetch('http://localhost:5000/api/orders', {
+            const response = await fetch(`${API_BASE_URL}/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

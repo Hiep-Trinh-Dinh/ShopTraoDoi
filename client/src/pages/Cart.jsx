@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react"
 import { useAuth } from "../context/AuthContext"
+import API_BASE_URL from '../utils/apiConfig'
 
 const Cart = () => {
     const { cart, updateCartItem, removeFromCart, getCartTotal } = useCart()

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import axios from "axios"
+import API_BASE_URL from '../utils/apiConfig'
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const Login = () => {
         console.log('Login attempt with:', formData) // Debug log
 
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/login", formData, {
+            const response = await axios.post(`${API_BASE_URL}/auth/login`, formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json'

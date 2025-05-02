@@ -6,6 +6,7 @@ import axios from "axios"
 import { useCart } from "../context/CartContext"
 import { useAuth } from "../context/AuthContext"
 import { ArrowRight } from "lucide-react"
+import API_BASE_URL from '../utils/apiConfig'
 
 const Home = () => {
     const [featuredProducts, setFeaturedProducts] = useState([])
@@ -17,7 +18,7 @@ const Home = () => {
     useEffect(() => {
         const fetchFeaturedProducts = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/products")
+                const response = await axios.get(`${API_BASE_URL}/products/featured`)
                 if (response.data.success) {
                     // Lấy 4 sản phẩm đầu tiên làm featured
                     setFeaturedProducts(response.data.products.slice(0, 4))

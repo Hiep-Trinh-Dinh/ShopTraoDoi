@@ -7,6 +7,8 @@ import { useAuth } from "../context/AuthContext"
 import { Clock, AlertCircle, CheckCircle, ArrowLeft } from "lucide-react"
 import RoomService from "../services/roomService"
 import RoomChat from '../components/RoomChat'
+import API_BASE_URL from '../utils/apiConfig'
+import socketConfig from '../utils/socketConfig'
 
 const Room = () => {
     const { id } = useParams()
@@ -101,7 +103,7 @@ const Room = () => {
     useEffect(() => {
         if (roomData && roomData.id) {
             // Tạo kết nối WebSocket
-            const ws = new WebSocket('ws://localhost:5000/ws/room');
+            const ws = new WebSocket(socketConfig.getSocket(`/ws/rooms/${roomData.id}`));
             
             ws.onopen = () => {
                 console.log('WebSocket connected');
@@ -165,7 +167,7 @@ const Room = () => {
         
         try {
             // Kiểm tra lại URL và phương thức gọi API
-            const response = await fetch(`http://localhost:5000/api/rooms/${id}/product-info`, {
+            const response = await fetch(`${API_BASE_URL}/rooms/${id}/product-info`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
