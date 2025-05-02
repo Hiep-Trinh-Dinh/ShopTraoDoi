@@ -55,11 +55,21 @@ app.use((req, res, next) => {
 });
 
 // Đảm bảo thứ tự middleware:
-// 1. Middleware cơ bản (cors, body-parser...)
-// 2. Phục vụ static files (trong production)
-// 3. API routes
-// 4. Catch-all cho client routes
+// 1. Middleware cơ bản
+// 2. Routes API
+// 3. Static files middleware
 
+// Đảm bảo routes API được định nghĩa đúng
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/chat', chatRoutes);
+
+// Sau đó mới đến static file serving
 if (process.env.NODE_ENV === 'production') {
   console.log('Production mode - setting up static file serving');
   const setupStaticFileServing = require('./serveFrontend');
@@ -101,16 +111,6 @@ const initializeServer = async () => {
             resave: true,
             saveUninitialized: true
         }));
-
-        // API Routes
-        app.use('/api/auth', authRoutes);
-        app.use('/api/products', productRoutes);
-        app.use('/api/cart', cartRoutes);
-        app.use('/api/rooms', roomRoutes);
-        app.use('/api/orders', orderRoutes);
-        app.use('/api/admin', adminRoutes);
-        app.use('/api/messages', messageRoutes);
-        app.use('/api/chat', chatRoutes);
 
         // Test routes
         app.get('/test', (req, res) => {
