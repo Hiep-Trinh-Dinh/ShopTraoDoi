@@ -20,7 +20,6 @@ const chatRoutes = require('./routes/chatRoutes');
 const http = require('http');
 const setupWebSocket = require('./websocket');
 const setupAdmin = require('./config/setupAdmin');
-const setupStaticServing = require('./serveFrontend');
 
 const app = express();
 const server = http.createServer(app);
@@ -54,6 +53,13 @@ app.use((req, res, next) => {
     console.log('=== End Request ===\n');
     next();
 });
+
+// Phục vụ frontend trong môi trường production
+if (process.env.NODE_ENV === 'production') {
+  console.log('Production mode - setting up static file serving');
+  const setupStaticServing = require('./serveFrontend');
+  setupStaticServing(app);
+}
 
 // Connect to MongoDB and start server
 const initializeServer = async () => {
@@ -121,7 +127,7 @@ const initializeServer = async () => {
         });
 
         // 404 handler
-        app.use((req, res) => {
+        app.use('/api/*', (req, res) => {
             res.status(404).json({
                 success: false,
                 message: 'Route not found'
@@ -148,10 +154,6 @@ const initializeServer = async () => {
 ====================================
             `);
         });
-
-        if (process.env.NODE_ENV === 'production') {
-            setupStaticServing(app);
-        }
 
     } catch (error) {
         console.error('Server initialization failed:', error);
