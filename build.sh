@@ -6,7 +6,7 @@ npm install --legacy-peer-deps
 
 # Build client
 cd ../client
-npm install
+npm install --legacy-peer-deps
 npm run build
 
 # Trở về thư mục gốc
