@@ -144,7 +144,7 @@ exports.getFeaturedProducts = async (req, res) => {
     
     return res.status(200).json({
       success: true,
-      data: featuredProducts
+      products: featuredProducts
     });
   } catch (error) {
     console.error('Error in getFeaturedProducts:', error);
