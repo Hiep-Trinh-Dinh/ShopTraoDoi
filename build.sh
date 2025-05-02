@@ -8,15 +8,19 @@ npm install cloudinary@1.41.3 --save
 
 # Build client
 cd ../client
+
+# Cài đặt tất cả dependencies trước
 npm install --legacy-peer-deps
+
+# Cài đặt Vite
 npm install --save-dev vite@5.1.5 @vitejs/plugin-react@4.2.1
 
-# Sửa lỗi @emoji-mart/react
-npm install react@18.2.0 react-dom@18.2.0 --legacy-peer-deps
+# Ghi đè React với phiên bản 18
+npm install react@18.2.0 react-dom@18.2.0 --save --legacy-peer-deps --force
 
-# Build với chế độ force
+# Build
 export NODE_OPTIONS=--openssl-legacy-provider
-npx vite build --force
+npx vite build
 
 # Trở về thư mục gốc
 cd ..
