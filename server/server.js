@@ -54,12 +54,20 @@ app.use((req, res, next) => {
     next();
 });
 
-// Phục vụ frontend trong môi trường production
+// Đảm bảo thứ tự middleware:
+// 1. Middleware cơ bản (cors, body-parser...)
+// 2. Phục vụ static files (trong production)
+// 3. API routes
+// 4. Catch-all cho client routes
+
 if (process.env.NODE_ENV === 'production') {
   console.log('Production mode - setting up static file serving');
-  const setupStaticServing = require('./serveFrontend');
-  setupStaticServing(app);
+  const setupStaticFileServing = require('./serveFrontend');
+  setupStaticFileServing(app);
 }
+
+// Routes API PHẢI ở sau static file serving và trước catch-all route
+app.use('/api', apiRoutes);
 
 // Connect to MongoDB and start server
 const initializeServer = async () => {

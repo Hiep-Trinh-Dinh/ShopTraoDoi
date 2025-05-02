@@ -1,25 +1,33 @@
 const path = require('path');
 const express = require('express');
 
-function setupStaticServing(app) {
+function setupStaticFileServing(app) {
   console.log('Setting up static file serving...');
   
-  // Phục vụ các file tĩnh từ build folder của client
+  // Đường dẫn tới thư mục dist
   const staticPath = path.join(__dirname, '../client/dist');
   console.log('Static path:', staticPath);
-  app.use(express.static(staticPath));
+  
+  // Phục vụ các file static từ thư mục dist
+  app.use(express.static(staticPath, {
+    // Đảm bảo MIME types được set đúng
+    setHeaders: (res, filePath) => {
+      // Đặt đúng Content-Type cho các file JavaScript module
+      if (filePath.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      }
+    }
+  }));
 
-  // Xử lý tất cả các route khác để trả về index.html
+  // Route này chỉ xử lý các request không phải API và không phải static files
   app.get('*', (req, res, next) => {
-    // Bỏ qua các requests đến API và socket
-    if (req.url.startsWith('/api') || req.url.startsWith('/socket.io')) {
-      console.log('API request, passing to next middleware');
+    // Bỏ qua các request tới API
+    if (req.url.startsWith('/api')) {
       return next();
     }
     
-    console.log('Serving index.html for route:', req.url);
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    res.sendFile(path.join(staticPath, 'index.html'));
   });
 }
 
-module.exports = setupStaticServing;
+module.exports = setupStaticFileServing;
