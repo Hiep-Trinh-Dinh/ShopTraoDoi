@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 
-const Image = ({ src, alt, className, ...props }) => {
+const Image = ({ src, alt, className, fallback = '/placeholder.jpg', ...props }) => {
   const [imgSrc, setImgSrc] = useState(src);
-  const defaultImage = '/path/to/default-image.jpg';
   
   const handleError = () => {
-    setImgSrc(defaultImage);
+    setImgSrc(fallback);
   };
   
   return (
     <img 
       src={imgSrc} 
-      alt={alt} 
+      alt={alt || 'Image'} 
       className={className}
       onError={handleError}
       {...props}

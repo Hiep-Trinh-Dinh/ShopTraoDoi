@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { roomService } from '../services/roomService';
+import API_BASE_URL from '../utils/apiConfig';
 
 const RoomContext = createContext();
 

@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: shoptraodoi-api
+    name: shoptraodoi
     env: node
-    buildCommand: npm install --legacy-peer-deps
-    startCommand: npm start
+    buildCommand: ./build.sh
+    startCommand: cd server && npm start
     envVars:
       - key: PORT
         value: 10000
@@ -23,3 +23,5 @@ services:
         value: TaDwpWj1Mx-VXCGye9OqIql1IYA
       - key: NODE_ENV
         value: production
+      - key: VITE_GEMINI_API_KEY
+        value: AIzaSyC-hqlk1hXU6jh-m5J-PnxaPaCSMCb_5hE

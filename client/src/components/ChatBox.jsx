@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Bot, Smile, Paperclip } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
 import { WEBSITE_DATA } from '../data/websiteData';
+import API_BASE_URL from '../utils/apiConfig';
 
 // Thay thế API_KEY bằng key của bạn
 const API_KEY = "AIzaSyC-hqlk1hXU6jh-m5J-PnxaPaCSMCb_5hE"; // Thay thế bằng key thật của bạn
@@ -477,7 +478,7 @@ const ChatBox = () => {
             };
             
             // Gọi API để lưu vào database
-            const response = await fetch('http://localhost:5000/api/chat/conversation', {
+            const response = await fetch(`${API_BASE_URL}/api/chat/conversation`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -519,7 +520,7 @@ const ChatBox = () => {
             };
             
             // Gọi API để lưu vào database
-            const response = await fetch('http://localhost:5000/api/chat/feedback', {
+            const response = await fetch(`${API_BASE_URL}/api/chat/feedback`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -750,7 +751,7 @@ const ChatBox = () => {
     // Thêm chức năng phân tích dữ liệu từ database thông qua API
     const fetchAnalytics = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/chat/analytics', {
+            const response = await fetch(`${API_BASE_URL}/api/chat/analytics`, {
                 headers: { 
                     'Authorization': `Bearer ${localStorage.getItem('token')}` 
                 }

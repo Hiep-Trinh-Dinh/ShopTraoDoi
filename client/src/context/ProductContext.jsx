@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from 'axios';
+import API_BASE_URL from '../utils/apiConfig';
 
 const ProductContext = createContext();
 
@@ -12,7 +13,7 @@ export const ProductProvider = ({ children }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/products');
+            const response = await axios.get(`${API_BASE_URL}/api/products`);
             if (response.data.success) {
                 setProducts(response.data.products);
             } else {
@@ -28,7 +29,7 @@ export const ProductProvider = ({ children }) => {
 
     const addProduct = async (productData) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/products', productData, {
+            const response = await axios.post(`${API_BASE_URL}/api/products`, productData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -45,7 +46,7 @@ export const ProductProvider = ({ children }) => {
 
     const updateProduct = async (id, productData) => {
         try {
-            const response = await axios.put(`http://localhost:5000/api/products/${id}`, productData, {
+            const response = await axios.put(`${API_BASE_URL}/api/products/${id}`, productData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -62,7 +63,7 @@ export const ProductProvider = ({ children }) => {
 
     const deleteProduct = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/products/${id}`, {
+            const response = await axios.delete(`${API_BASE_URL}/api/products/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

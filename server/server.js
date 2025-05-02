@@ -20,6 +20,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const http = require('http');
 const setupWebSocket = require('./websocket');
 const setupAdmin = require('./config/setupAdmin');
+const setupStaticServing = require('./serveFrontend');
 
 const app = express();
 const server = http.createServer(app);
@@ -27,7 +28,7 @@ const server = http.createServer(app);
 // CORS configuration
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? ['https://shoptraodoi-client.onrender.com', 'https://shoptraodoi.onrender.com'] 
+        ? true // Cho phép cùng origin trong production
         : ['http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -147,6 +148,10 @@ const initializeServer = async () => {
 ====================================
             `);
         });
+
+        if (process.env.NODE_ENV === 'production') {
+            setupStaticServing(app);
+        }
 
     } catch (error) {
         console.error('Server initialization failed:', error);

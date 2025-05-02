@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from "react"
 import axios from "axios"
 import { useAuth } from "./AuthContext"
+import API_BASE_URL from '../utils/apiConfig';
 
 const CartContext = createContext()
 
@@ -31,7 +32,7 @@ export const CartProvider = ({ children }) => {
 
     const fetchCart = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/cart", {
+            const response = await axios.get(`${API_BASE_URL}/api/cart`, {
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
@@ -69,7 +70,7 @@ export const CartProvider = ({ children }) => {
             });
 
             const response = await axios.post(
-                "http://localhost:5000/api/cart/add",
+                `${API_BASE_URL}/api/cart/add`,
                 {
                     productId,
                     quantity: parsedQuantity
@@ -104,7 +105,7 @@ export const CartProvider = ({ children }) => {
 
     const updateCartItem = async (productId, quantity) => {
         try {
-            const response = await axios.put("http://localhost:5000/api/cart/update",
+            const response = await axios.put(`${API_BASE_URL}/api/cart/update`,
                 { productId, quantity },
                 {
                     withCredentials: true,

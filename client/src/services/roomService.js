@@ -1,17 +1,39 @@
 // client/src/services/roomService.js
-import axios from 'axios';
+import API_BASE_URL from '../utils/apiConfig';
 
-const API_URL = 'http://localhost:5000/api/rooms';
+export const getRooms = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/rooms`);
+    const data = await response.json();
+    
+    if (!data.success) {
+      throw new Error(data.message);
+    }
+    
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching rooms:', error);
+    throw error;
+  }
+};
 
 class RoomService {
   async createRoom(roomData) {
     try {
-      const response = await axios.post(API_URL, roomData);
-      if (response.data.success) {
-        return response.data;
-      } else {
-        throw new Error(response.data.message || 'Failed to create room');
+      const response = await fetch(`${API_BASE_URL}/rooms`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(roomData)
+      });
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to create room');
       }
+      
+      return data.data;
     } catch (error) {
       console.error('Room service error:', error);
       throw error;
@@ -20,8 +42,14 @@ class RoomService {
 
   async findRoom(roomId) {
     try {
-      const response = await axios.get(`${API_URL}/${roomId}`);
-      return response.data;
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}`);
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       throw error;
     }
@@ -29,10 +57,20 @@ class RoomService {
 
   async updateProductInfo(roomId, productInfo) {
     try {
-      const response = await axios.patch(`${API_URL}/${roomId}/product-info`, {
-        productInfo
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/product-info`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productInfo })
       });
-      return response.data;
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       throw error;
     }
@@ -40,10 +78,20 @@ class RoomService {
 
   async depositPayment(roomId, amount) {
     try {
-      const response = await axios.post(`${API_URL}/${roomId}/deposit`, {
-        amount
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/deposit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount })
       });
-      return response.data;
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       throw error;
     }
@@ -51,8 +99,20 @@ class RoomService {
 
   async verifyProduct(roomId, verificationData) {
     try {
-      const response = await axios.post(`${API_URL}/${roomId}/verify`, verificationData);
-      return response.data;
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(verificationData)
+      });
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       throw error;
     }
@@ -60,8 +120,16 @@ class RoomService {
 
   async confirmTransaction(roomId) {
     try {
-      const response = await axios.post(`${API_URL}/${roomId}/confirm`);
-      return response.data;
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/confirm`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       throw error;
     }
@@ -69,8 +137,21 @@ class RoomService {
 
   async updateRole(roomId, role) {
     try {
-      const response = await axios.put(`${API_URL}/${roomId}/role`, { role });
-      return response.data;
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/role`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ role })
+      });
+      const data = await response.json();
+      
+      if (!data.success) {
+        console.error('Error updating role:', data.message);
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       console.error('Error updating role:', error);
       throw error;
@@ -79,13 +160,22 @@ class RoomService {
 
   async updateRoomStatus(roomId, data) {
     try {
-      const response = await axios.put(`${API_URL}/${roomId}/status`, data, {
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/status`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        },
+        body: JSON.stringify(data)
       });
-      return response.data;
+      const data = await response.json();
+      
+      if (!data.success) {
+        console.error('Error updating room status:', data.message);
+        throw new Error(data.message);
+      }
+      
+      return data.data;
     } catch (error) {
       console.error('Error updating room status:', error);
       throw error;

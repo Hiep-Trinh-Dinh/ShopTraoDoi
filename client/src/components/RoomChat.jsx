@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, Smile } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
 import { useAuth } from '../context/AuthContext';
+import socketConfig from '../utils/socketConfig';
 
 const RoomChat = ({ roomId, role }) => {
     const { user } = useAuth();
@@ -37,32 +38,32 @@ const RoomChat = ({ roomId, role }) => {
 
         try {
             console.log('Attempting to connect to WebSocket...');
-            const ws = new WebSocket(`ws://localhost:5000/ws/room`);
-            wsRef.current = ws;
+            const socket = socketConfig.getSocket();
+            wsRef.current = socket;
             
             // Connection timeout
             const connectionTimeout = setTimeout(() => {
-                if (ws.readyState === WebSocket.CONNECTING) {
+                if (socket.readyState === WebSocket.CONNECTING) {
                     console.log('Connection timeout - closing socket');
-                    ws.close();
+                    socket.close();
                 }
             }, 5000);
             
             // Send room ID after connection
-            ws.onopen = () => {
+            socket.onopen = () => {
                 console.log('Connected to WebSocket server');
                 clearTimeout(connectionTimeout);
                 setIsConnected(true);
                 setReconnectAttempt(0);
                 
                 // Send room ID
-                ws.send(JSON.stringify({
+                socket.send(JSON.stringify({
                     type: 'join_room',
                     roomId: roomId
                 }));
             };
 
-            ws.onmessage = (event) => {
+            socket.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
                     console.log('Received message:', data);
@@ -126,7 +127,7 @@ const RoomChat = ({ roomId, role }) => {
                 }
             };
 
-            ws.onclose = (event) => {
+            socket.onclose = (event) => {
                 console.log('WebSocket closed:', {
                     code: event.code,
                     reason: event.reason,
@@ -148,22 +149,22 @@ const RoomChat = ({ roomId, role }) => {
                 }
             };
 
-            ws.onerror = (error) => {
+            socket.onerror = (error) => {
                 console.error('WebSocket error:', error);
                 // Log additional connection state information
                 console.log('Connection state:', {
-                    readyState: ws.readyState,
-                    url: ws.url,
-                    protocol: ws.protocol,
-                    bufferedAmount: ws.bufferedAmount
+                    readyState: socket.readyState,
+                    url: socket.url,
+                    protocol: socket.protocol,
+                    bufferedAmount: socket.bufferedAmount
                 });
             };
 
             // Handle component unmount
             return () => {
                 clearTimeout(connectionTimeout);
-                if (ws.readyState === WebSocket.OPEN) {
-                    ws.close(1000, 'Component unmounting');
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.close(1000, 'Component unmounting');
                 }
             };
         } catch (error) {
