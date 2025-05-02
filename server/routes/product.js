@@ -6,7 +6,8 @@ const {
     createProduct, 
     getProductById, 
     updateProduct, 
-    deleteProduct 
+    deleteProduct,
+    getFeaturedProducts
 } = require('../controllers/productController');
 
 // Get all products
@@ -23,5 +24,8 @@ router.put('/:id', protect, admin, updateProduct);
 
 // Delete product (Admin only)
 router.delete('/:id', protect, admin, deleteProduct);
+
+// Thêm route cho featured products
+router.get('/featured', getFeaturedProducts);
 
 module.exports = router; 

@@ -133,4 +133,24 @@ exports.deleteProduct = async (req, res) => {
             message: 'Lỗi khi xóa sản phẩm'
         });
     }
+};
+
+// Thêm controller cho featured products
+exports.getFeaturedProducts = async (req, res) => {
+    try {
+        const featuredProducts = await Product.find()
+            .sort({ createdAt: -1 })
+            .limit(6);
+
+        res.json({
+            success: true,
+            products: featuredProducts
+        });
+    } catch (error) {
+        console.error('Error fetching featured products:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi lấy sản phẩm nổi bật'
+        });
+    }
 }; 

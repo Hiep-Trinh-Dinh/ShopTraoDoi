@@ -69,6 +69,22 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/chat', chatRoutes);
 
+// Thêm ngay sau các route API và trước static files middleware
+// Xử lý tạm thời cho URL bị lặp /api/api/*
+app.use('/api/api/*', (req, res, next) => {
+    // Chuyển hướng /api/api/products thành /api/products
+    const correctedPath = req.url.replace('/api/', '/');
+    console.log(`Redirecting duplicate API path from ${req.url} to ${correctedPath}`);
+    req.url = correctedPath;
+    next();
+});
+
+// Thêm dòng này ngay sau các routes API
+app.use('/api/*', (req, res, next) => {
+    console.log(`API request: ${req.method} ${req.url}`);
+    next();
+});
+
 // Sau đó mới đến static file serving
 if (process.env.NODE_ENV === 'production') {
   console.log('Production mode - setting up static file serving');
