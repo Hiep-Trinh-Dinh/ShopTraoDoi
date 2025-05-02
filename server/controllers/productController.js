@@ -135,22 +135,27 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
-// Thêm controller cho featured products
+// Thêm hoặc cập nhật hàm getFeaturedProducts với xử lý lỗi đầy đủ
 exports.getFeaturedProducts = async (req, res) => {
-    try {
-        const featuredProducts = await Product.find()
-            .sort({ createdAt: -1 })
-            .limit(6);
-
-        res.json({
-            success: true,
-            products: featuredProducts
-        });
-    } catch (error) {
-        console.error('Error fetching featured products:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Lỗi khi lấy sản phẩm nổi bật'
-        });
-    }
+  try {
+    console.log('Getting featured products...');
+    
+    const featuredProducts = await Product.find()
+      .sort({ createdAt: -1 })
+      .limit(6);
+    
+    console.log(`Found ${featuredProducts.length} featured products`);
+    
+    return res.status(200).json({
+      success: true,
+      data: featuredProducts
+    });
+  } catch (error) {
+    console.error('Error in getFeaturedProducts:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi lấy sản phẩm nổi bật',
+      error: error.message
+    });
+  }
 }; 

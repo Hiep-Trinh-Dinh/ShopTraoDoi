@@ -47,6 +47,14 @@ function setupStaticFileServing(app) {
     console.log(`Serving index.html for route: ${req.url}`);
     res.sendFile(path.join(staticPath, 'index.html'));
   });
+
+  // Thêm vào middleware trước app.get('*')
+  app.use('/api/api/*', (req, res, next) => {
+    // Chuyển hướng URL bị lặp /api
+    const correctedPath = req.originalUrl.replace('/api/api/', '/api/');
+    console.log(`Redirecting duplicate API path: ${req.originalUrl} -> ${correctedPath}`);
+    res.redirect(correctedPath);
+  });
 }
 
 module.exports = setupStaticFileServing;

@@ -72,11 +72,9 @@ app.use('/api/chat', chatRoutes);
 // Thêm ngay sau các route API và trước static files middleware
 // Xử lý tạm thời cho URL bị lặp /api/api/*
 app.use('/api/api/*', (req, res, next) => {
-    // Chuyển hướng /api/api/products thành /api/products
-    const correctedPath = req.url.replace('/api/', '/');
-    console.log(`Redirecting duplicate API path from ${req.url} to ${correctedPath}`);
-    req.url = correctedPath;
-    next();
+    const correctedPath = req.originalUrl.replace('/api/api/', '/api/');
+    console.log(`Redirecting duplicate API path: ${req.originalUrl} -> ${correctedPath}`);
+    res.redirect(correctedPath);
 });
 
 // Thêm dòng này ngay sau các routes API
