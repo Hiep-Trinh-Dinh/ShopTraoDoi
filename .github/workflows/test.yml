@@ -1,0 +1,113 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
+    
+    - name: Run server tests
+      run: |
+        cd server
+        npm test
+    
+    - name: Generate coverage report
+      run: |
+        cd server
+        npm test -- --coverage
+        
+    - name: Upload backend coverage
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./server/coverage
+        flags: backend
+        
+  frontend-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
+    - name: Run client tests
+      run: |
+        cd client
+        npm test
+      
+    - name: Generate coverage report
+      run: |
+        cd client
+        npm test -- --coverage
+        
+    - name: Upload frontend coverage
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./client/coverage
+        flags: frontend
+        
+  e2e-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:4.4
+        ports:
+          - 27017:27017
+          
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        
+    - name: Install dependencies
+      run: |
+        cd server
+        npm ci
+        cd ../client
+        npm ci
+        
+    - name: Start server
+      run: |
+        cd server
+        npm start &
+        sleep 5
+        
+    - name: Start client
+      run: |
+        cd client
+        npm run dev &
+        sleep 5
+        
+    - name: Run Cypress tests
+      run: |
+        cd client
+        npm run cypress:run 

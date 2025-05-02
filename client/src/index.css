@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #000000;
+  --secondary: #ffffff;
+  --accent: #f3f4f6;
+  --text: #333333;
+  --error: #ef4444;
+  --success: #10b981;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-md font-medium transition-colors;
+}
+
+.btn-primary {
+  @apply bg-black text-white hover:bg-gray-800;
+}
+
+.btn-outline {
+  @apply border border-black text-black hover:bg-gray-100;
+}
+
+.input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
