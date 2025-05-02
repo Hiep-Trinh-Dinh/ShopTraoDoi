@@ -10,6 +10,9 @@ const {
     getFeaturedProducts
 } = require('../controllers/productController');
 
+// Thêm route cho featured products TRƯỚC /:id
+router.get('/featured', getFeaturedProducts);
+
 // Get all products
 router.get('/', getProducts);
 
@@ -24,8 +27,5 @@ router.put('/:id', protect, admin, updateProduct);
 
 // Delete product (Admin only)
 router.delete('/:id', protect, admin, deleteProduct);
-
-// Thêm route cho featured products
-router.get('/featured', getFeaturedProducts);
 
 module.exports = router; 
