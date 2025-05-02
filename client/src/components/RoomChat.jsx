@@ -3,6 +3,7 @@ import { Send, Smile } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
 import { useAuth } from '../context/AuthContext';
 import socketConfig from '../utils/socketConfig';
+import API_BASE_URL from '../utils/apiConfig';
 
 const RoomChat = ({ roomId, role }) => {
     const { user } = useAuth();
@@ -76,7 +77,7 @@ const RoomChat = ({ roomId, role }) => {
                     if (data.type === 'connection_established') {
                         console.log('Room connection confirmed by server');
                         // Fetch existing messages when room connection is confirmed
-                        fetch(`http://localhost:5000/api/messages/rooms/${roomId}/messages`)
+                        fetch(`${API_BASE_URL}/messages/rooms/${roomId}/messages`)
                             .then(response => {
                                 if (!response.ok) {
                                     throw new Error('API response not OK');

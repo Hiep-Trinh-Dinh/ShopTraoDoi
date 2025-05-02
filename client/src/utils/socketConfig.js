@@ -1,16 +1,15 @@
-import io from 'socket.io-client';
-
 const socketConfig = {
   getSocket: () => {
-    const socket = io(process.env.NODE_ENV === 'production' 
-      ? '/' 
-      : 'http://localhost:5000', 
-      {
-        path: process.env.NODE_ENV === 'production' ? '/socket.io' : undefined,
-        transports: ['websocket', 'polling']
-      }
-    );
-    return socket;
+    let socketUrl;
+    if (import.meta.env.VITE_API_BASE_URL === '/api') {
+      // Production - relative URL
+      socketUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`;
+    } else {
+      // Development
+      socketUrl = 'ws://localhost:5000';
+    }
+    
+    return new WebSocket(socketUrl);
   }
 };
 
